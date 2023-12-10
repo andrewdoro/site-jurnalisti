@@ -12,7 +12,7 @@ class ArticleManager {
     public function getMyArticles($userId) {
         $articles = [];
 
-        $sql = "SELECT id, title, content,category, author_id, status, status_message
+        $sql = "SELECT id, title, content,category, author_id, status, status_message, created_at
                 FROM articles
                 WHERE author_id = ?
                 ORDER BY status";
@@ -26,7 +26,7 @@ class ArticleManager {
                 $result = $stmt->get_result();
 
                 while ($row = $result->fetch_assoc()) {
-                    $article = new Article($row['id'], $row['title'], $row['content'],$row["category"], $row['author_id'], $row['status'], $row['status_message']);
+                    $article = new Article($row['id'], $row['title'], $row['content'],$row["category"], $row['author_id'], $row['status'], $row['status_message'], $row["created_at"]);
                     $articles[] = $article;
                 }
             }
@@ -43,7 +43,7 @@ class ArticleManager {
         $result = $this->db->query("SELECT * FROM articles");
 
         while ($row = $result->fetch_assoc()) {
-            $article = new Article($row['id'], $row['title'], $row['content'], $row['category'], $row["author_id"],$row["status"],$row["status_message"]);
+            $article = new Article($row['id'], $row['title'], $row['content'], $row['category'], $row["author_id"],$row["status"],$row["status_message"], $row["created_at"]);
             $articles[] = $article;
         }
 
@@ -80,13 +80,25 @@ class ArticleManager {
         }
     }
 
-    public function getApprovedArticles() {
+    public function getApprovedArticlesByCategory($category) {
         $articles = [];
 
-        $sql = "SELECT id, title, content, author_id, status, status_message, category FROM articles WHERE status='approved'";
-        $result = $this->db->query($sql);
+        $sql = "SELECT id, title, content, author_id, status, status_message, category,created_at FROM articles WHERE status='approved'";
+        $newCategory = $category=== 'IS NOT NULL' ? `category` : $category;
 
-        if ($result) {
+        // Check if $category is not "all" to add the category condition
+        if ($category !== "all") {
+            $sql .= " AND category = ?";
+        }
+        $stmt = $this->db->prepare($sql);
+
+        if ($category !== "all") {
+            $stmt->bind_param("s", $category);
+        }
+
+        if ($stmt->execute()) {
+            $result = $stmt->get_result();
+
             while ($row = $result->fetch_assoc()) {
                 $article = new Article(
                     $row['id'],
@@ -95,11 +107,13 @@ class ArticleManager {
                     $row['author_id'],
                     $row['status'],
                     $row['status_message'],
-                    $row['category']
+                    $row['category'],
+                    $row["created_at"]
                 );
                 $articles[] = $article;
             }
-            $result->free();
+            $stmt->close();
+
         }
 
         return $articles;
@@ -108,7 +122,7 @@ class ArticleManager {
     {
         $articles = [];
 
-        $stmt = $this->db->prepare("SELECT id, title, content, category, author_id, status, status_message FROM articles WHERE author_id = ? AND category = ?");
+        $stmt = $this->db->prepare("SELECT id, title, content, category, author_id, status, status_message,created_at FROM articles WHERE author_id = ? AND category = ?");
         $stmt->bind_param("is", $userId, $category);
 
         if ($stmt->execute()) {
@@ -122,7 +136,9 @@ class ArticleManager {
                     $row['category'],
                     $row['author_id'],
                     $row['status'],
-                    $row['status_message']
+                    $row['status_message'],
+                    $row["created_at"]
+
                 );
             }
         }
@@ -137,7 +153,7 @@ class ArticleManager {
         $articles = [];
         $newCategory = $category=== 'IS NOT NULL' ? `category` : $category;
 
-        $sql = "SELECT id, title, content, category, author_id, status, status_message FROM articles WHERE author_id = ?";
+        $sql = "SELECT id, title, content, category, author_id, status, status_message,created_at FROM articles WHERE author_id = ?";
 
         // Check if $category is not "all" to add the category condition
         if ($category !== "all") {
@@ -165,7 +181,9 @@ class ArticleManager {
                     $row['category'],
                     $row['author_id'],
                     $row['status'],
-                    $row['status_message']
+                    $row['status_message'],
+                    $row["created_at"]
+
                 );
             }
         }
@@ -186,7 +204,7 @@ class ArticleManager {
     public function getArticleById($articleId) {
         $article = null;
 
-        $stmt = $this->db->prepare("SELECT id, title, content, author_id, category, status, status_message FROM articles WHERE id = ?");
+        $stmt = $this->db->prepare("SELECT id, title, content, author_id, category, status, status_message, created_at FROM articles WHERE id = ?");
         $stmt->bind_param("i", $articleId);
 
         if ($stmt->execute()) {
@@ -194,7 +212,9 @@ class ArticleManager {
 
             if ($result->num_rows == 1) {
                 $row = $result->fetch_assoc();
-                $article = new Article($row['id'], $row['title'], $row['content'],$row["category"], $row['author_id'], $row['status'], $row['status_message']);
+                $article = new Article($row['id'], $row['title'], $row['content'],$row["category"], $row['author_id'], $row['status'], $row['status_message'],
+                    $row["created_at"]
+                );
             }
         }
 

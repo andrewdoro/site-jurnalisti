@@ -11,6 +11,11 @@ session_start();
 
 $articleManager = new ArticleManager($mysqli);
 
+$category = isset($_GET['category']) ? $_GET['category'] : "all";
+
+// Fetch articles based on the category
+$articles = $articleManager->getApprovedArticlesByCategory($category);
+
 ?>
     <!DOCTYPE html>
     <html lang="en">
@@ -35,11 +40,32 @@ $articleManager = new ArticleManager($mysqli);
                 asigurându-ne că sunteți mereu la curent.</p>
         </div>
 
+        <ul class="nav nav-tabs">
+            <!-- Meniul pentru categorii -->
+            <li class="nav-item">
+                <a class="nav-link <?php echo $category === null ? 'active' : ''; ?>" href="?category=all">Toate</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <?php echo $category === 'artistic' ? 'active' : ''; ?>" href="?category=artistic">Artistic</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <?php echo $category === 'technic' ? 'active' : ''; ?>" href="?category=technic">Tehnic</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <?php echo $category === 'science' ? 'active' : ''; ?>" href="?category=science">Știință</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <?php echo $category === 'moda' ? 'active' : ''; ?>" href="?category=moda">Modă</a>
+            </li>
+        </ul>
+
 
         <div class="article-container">
-            <?php foreach ($articleManager->getApprovedArticles() as $article): ?>
+            <?php foreach ($articles as $article): ?>
                 <div class="article">
                     <h2><?php echo $article->getTitle(); ?></h2>
+                    <h3><?php echo $article->getCreatedAt(); ?></h3>
+
                     <?php if(isset($_SESSION["user_id"])): ?>
                         <div class="article-content">
                             <p><?php echo $article->getContent(); ?></p>

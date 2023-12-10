@@ -9,8 +9,9 @@ class Article {
     private $category;
     private $status;
     private $statusMessage;
-    //TODO: add publishedAtDate for the article and sort by it
-    public function __construct($id, $title, $content,  $category, $author_id, $status, $statusMessage) {
+
+    private $created_at;
+    public function __construct($id, $title, $content,  $category, $author_id, $status, $statusMessage, $created_at) {
         $this->id = $id;
         $this->title = $title;
         $this->content = $content;
@@ -18,6 +19,7 @@ class Article {
         $this->author_id = $author_id;
         $this->status = $status;
         $this->statusMessage = $statusMessage;
+        $this->created_at=$created_at;
 
     }
 
@@ -25,6 +27,9 @@ class Article {
         return $this->id;
     }
 
+    public function getCreatedAt() {
+        return $this->created_at;
+    }
 
     public function setTitle($title)
     {
