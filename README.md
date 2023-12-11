@@ -4,7 +4,6 @@ Bine ați venit în proiectul nostru de proiectare și realizare a site-urilor w
 
 - **Andrei Dorobantu**
 - **Dicu Cristian**
-- **Cosmina Dulamita (Kondora)**
 
 ## Descriere
 
