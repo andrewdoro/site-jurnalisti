@@ -28,7 +28,7 @@ $articles = $articleManager->getApprovedArticlesByCategory($category);
     <body>
 
     <div class="container">
-        <div>
+        <div >
             <h1 class="my-5 welcome-message">Sursa Ta de Încredere pentru Știri și Actualizări Oportune</h1>
             <p class="text-left">
                 Bine ați venit la portalul nostru de știri,
@@ -68,7 +68,7 @@ $articles = $articleManager->getApprovedArticlesByCategory($category);
 
                     <?php if(isset($_SESSION["user_id"])): ?>
                         <div class="article-content">
-                            <p><?php echo $article->getContent(); ?></p>
+                            <p><?php echo nl2br(htmlspecialchars($article->getContent())); ?></p>
                         </div>
                     <?php endif; ?>
                 </div>

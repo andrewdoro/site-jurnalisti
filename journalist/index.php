@@ -87,7 +87,7 @@ $articles = $articleManager->getMyArticlesByCategory($_SESSION["user_id"], $cate
             <li>
                 <h2><?php echo $article->getTitle(); ?></h2>
                 <?php if(isset($_SESSION["user_id"])): ?>
-                    <p><?php echo $article->getContent(); ?></p>
+                    <p><?php echo nl2br(htmlspecialchars($article->getContent())); ?></p>
                 <?php endif; ?>
                 <span class="badge <?php echo getStatusBadgeClass($article->getStatus()); ?>"><?php echo $article->getStatus(); ?></span>
 

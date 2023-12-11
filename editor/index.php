@@ -52,7 +52,7 @@ $articleManager = new ArticleManager($mysqli);
                     <span class="float-right">
                         <a href="article-details.php?article_id=<?php echo $article->getId(); ?>" class="btn btn-info">Details</a>
                     </span>
-                    <p><?php echo $article->getContent(); ?></p>
+                    <p><?php echo nl2br(htmlspecialchars($article->getContent())); ?></p>
                     <span class="badge <?php echo getStatusBadgeClass($article->getStatus()); ?>"><?php echo $article->getStatus(); ?></span>
                 </li>
             <?php endforeach; ?>
