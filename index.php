@@ -43,7 +43,7 @@ $articles = $articleManager->getApprovedArticlesByCategory($category);
         <ul class="nav nav-tabs">
             <!-- Meniul pentru categorii -->
             <li class="nav-item">
-                <a class="nav-link <?php echo $category === null ? 'active' : ''; ?>" href="?category=all">Toate</a>
+                <a class="nav-link <?php echo $category === 'all' ? 'active' : ''; ?>" href="?category=all">Toate</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link <?php echo $category === 'artistic' ? 'active' : ''; ?>" href="?category=artistic">Artistic</a>
@@ -64,7 +64,7 @@ $articles = $articleManager->getApprovedArticlesByCategory($category);
             <?php foreach ($articles as $article): ?>
                 <div class="article">
                     <h2><?php echo $article->getTitle(); ?></h2>
-                    <h3><?php echo $article->getCreatedAt(); ?></h3>
+                    <h3><?php echo date("d-m-Y", strtotime($article->getCreatedAt())); ?></h3>
 
                     <?php if(isset($_SESSION["user_id"])): ?>
                         <div class="article-content">

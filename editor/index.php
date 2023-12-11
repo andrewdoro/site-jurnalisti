@@ -41,8 +41,7 @@ $articleManager = new ArticleManager($mysqli);
         <h1 class="my-5">Hi, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>. Welcome Editor</h1>
 
         <div class="action-buttons">
-            <a href="../journalist/create-article.php" class="btn btn-primary">Adaugă articol</a>
-            <a href="../reset-password.php" class="btn btn-warning">Resetează parola</a>
+            <!-- <a href="../reset-password.php" class="btn btn-warning">Resetează parola</a> -->
             <a href="../logout.php" class="btn btn-danger">Deconectează-te</a>
         </div>
 

@@ -17,7 +17,7 @@ if (empty($_SESSION["user_id"])) {
 $articleManager = new ArticleManager($mysqli);
 
 // Get the category from the URL parameter
-$category = isset($_GET['category']) ? $_GET['category'] : null;
+$category = isset($_GET['category']) ? $_GET['category'] : "all";
 
 // Fetch articles based on the category
 $articles = $articleManager->getMyArticlesByCategory($_SESSION["user_id"], $category);
@@ -58,12 +58,12 @@ $articles = $articleManager->getMyArticlesByCategory($_SESSION["user_id"], $cate
 
     <div class="action-buttons">
         <a href="create-article.php" class="btn btn-primary">Adaugă articol</a>
-        <a href="../reset-password.php" class="btn btn-warning">Resetează parola</a>
-        <a href="../logout.php" class="btn btn-danger">Deconectează-te</a>
-    </div>
+       <!-- <a href="../reset-password.php" class="btn btn-warning">Resetează parola</a>-->
+      <a href="../logout.php" class="btn btn-danger">Deconectează-te</a>
+   </div>
 
-    <ul class="nav nav-tabs">
-        <!-- Meniul pentru categorii -->
+   <ul class="nav nav-tabs">
+       <!-- Meniul pentru categorii -->
         <li class="nav-item">
             <a class="nav-link <?php echo $category === null ? 'active' : ''; ?>" href="?category=all">Toate</a>
         </li>
